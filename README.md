@@ -2,8 +2,6 @@
 
 This is simply to keep track of the steps I took to set up a React + Typescript project with webpack following [Learn React with TypeScript](https://www.packtpub.com/product/learn-react-with-typescript-second-edition/9781804614204) by Carl Rippon.
 
-## Webpack
-
 Webpack is a tool that "bundles JavaScript files for usage in a browser". As far as I understand this means that it takes all the files necessary for a project to run and group them together so that they can be used in a browser. I guess this is useful knowing that we are going to use React and Typescript and will probably deal with various files of different format.
 
 ## Setting up the project
@@ -116,4 +114,29 @@ As I understand it, this file is complementary to the `index.html` file. In the 
 
 We could have just put that tag into our static HTML file, but why do simple when we can do complicated? In more seriousness, this is a bit overdone here, but I am starting to get it now.
 
+Now that Typescript and React are installed, what do we need? Our goal here is to build a simple web app that says "My FIRST React and TypeScript App!" in the browser. We are going to need turning the Typescript and React code into Javascript and then bundle it all together. This is where Babel and Webpack come in.
 
+We defined earlier a `tsconfig.json` file to configure the Typescript compiler. In it, there was a `"noEmit": true` option. This prevent the Typescript compiler from doing any transpilation. That part is handled by Babel, which we set up via a series of `npm` commands:
+
+```bash
+npm i -D @babel/core
+npm i -D @babel/preset-env
+npm i -D @babel/preset-react
+npm i -D @babel/preset-typescript
+npm i -D @babel/plugin-transform-runtime @babel/runtime
+``` 
+
+The two important lines for me here are the `preset-react` and `preset-typescript`, allowing React and Typescript code to be turned into Javascript. Following these command line, we create a `.babelrc.json` file at the root of the project:
+
+```json
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime"
+  ]
+}
+```
