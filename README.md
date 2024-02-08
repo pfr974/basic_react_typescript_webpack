@@ -33,4 +33,27 @@ We start first with a `package.json` file at the root level and a simple `index.
   </body>
 </html>
 ```
-Nothing dramatic for now. The next thing to is to install Typescript and React in the project.
+Nothing dramatic for now. The next thing to is to install Typescript and React in the project via `npm`.
+With Typescript after running the `npm` command, we also have to create a configuration file, `tsconfig.json` at, you guess it, the root of the project. To be completely honest, I still struggle to understand the content of this file:
+
+```json
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "moduleResolution": "node",    
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+From my memory of my previous job, I would say that since we are going to have files with the `.tsx` extension, we need to configure how the Typescript compiler will handle them. We also need to tell it that we are going to use React in this project so that's where the `"jsx": "react"` is coming from.

@@ -1,5 +1,8 @@
 {
   "name": "my-app",
   "description": "My first React and TypeScript app",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
 }
