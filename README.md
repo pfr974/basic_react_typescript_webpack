@@ -4,7 +4,7 @@ This is simply to keep track of the steps I took to set up a React + Typescript 
 
 Webpack is a tool that "bundles JavaScript files for usage in a browser". As far as I understand this means that it takes all the files necessary for a project to run and group them together so that they can be used in a browser. I guess this is useful knowing that we are going to use React and Typescript and will probably deal with various files of different format.
 
-## Setting up the project
+## Initial set up
 
 We are going to start by setting up a `src` folder to hold our source code and write the various configuration files that we place at the root of the project folder. 
 
@@ -140,3 +140,93 @@ The two important lines for me here are the `preset-react` and `preset-typescrip
   ]
 }
 ```
+
+## Gluing everything together with Webpack
+
+Now that we have done a lot of set up, we need to glue all of the above together with Webpack. We start by running a series of `npm` commands to install Webpack and its various plugins:
+
+```bash
+npm i -D webpack webpack-cli
+npm i -D webpack-dev-server
+npm i -D babel-loader
+npm i -D html-webpack-plugin
+```
+
+Note the `babel-loader`  that allows to transpile the Typescript and React code into Javascript.
+
+Now that webpack is installed, it needs to be configured. Again, being compeltely honest here, this is still beyond my understanding. For now, I will just copy and paste the Typescript configuration file that the book suggested and run with it:
+
+ ```typescript
+ import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import {
+  Configuration as WebpackConfig,
+  HotModuleReplacementPlugin,
+} from 'webpack';
+import { 
+  Configuration as WebpackDevServerConfig 
+} from 'webpack-dev-server';
+
+type Configuration = WebpackConfig & {
+  devServer?: WebpackDevServerConfig;
+}
+
+const config: Configuration = {
+  mode: 'development',
+  output: {
+    publicPath: '/',
+  },
+  entry: './src/index.tsx',
+  module: {
+    rules: [
+      {
+        test: /\.(ts|js)x?$/i,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+          },
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+    }),
+    new HotModuleReplacementPlugin(),
+  ],
+  devtool: 'inline-source-map',
+  devServer: {
+    static: path.join(__dirname, 'dist'),
+    historyApiFallback: true,
+    port: 4000,
+    open: true,
+    hot: true,
+  }
+};
+
+export default config;
+```
+
+After creating this file at the root of the project, we then need to add the following to our `package.json` file:
+
+```json
+  "scripts": {
+    "start": "webpack serve --config webpack.dev.config.ts"
+  }
+```
+
+Finally, to run the app in development mode, we need to run `npm start`. This will trigger the browser to open and display our app!
+
+![My first React and Typescript app](first_react_typescript_app_browser.png)
+
+## Conclusion
+
+That was a lot of of work for what's basically a "Hello World" app. But I found it interesting to see how:
+- the React component is loaded into the html file
+- The Typescript and React code is turned into Javascript via Webpack and Babel
